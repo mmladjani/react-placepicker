@@ -8,7 +8,7 @@ import logoImg from "./assets/logo.png";
 import { sortPlacesByDistance } from './loc.js';
 
 function App() {
-  const modal = useRef();
+  const [openModal, setOpenModal] = useState(false);
   const selectedPlace = useRef();
   const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState([]);
@@ -26,34 +26,43 @@ function App() {
   })
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
     selectedPlace.current = id;
+    setOpenModal(true);
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setOpenModal(false);
   }
 
   function handleSelectPlace(id) {
     setPickedPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((place) => place.id === id)) {
+        console.log(prevPickedPlaces, 'prevPickedPlaces')
         return prevPickedPlaces;
       }
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    const storedIds = JSON.parse(sessionStorage.getItem('selectedPlaces')) || [];
+    if(storedIds.indexOf(id) === -1){
+      (sessionStorage.setItem(
+        'selectedPlaces',
+        JSON.stringify([...storedIds, id])
+      ))
+    }
   }
 
   function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    setOpenModal(false)
   }
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={openModal} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
