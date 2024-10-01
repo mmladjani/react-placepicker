@@ -1,5 +1,4 @@
-import { useRef, useState, useEffect } from "react";
-
+import { useRef, useState, useEffect, useCallback } from "react";
 import Places from "./components/Places";
 import { AVAILABLE_PLACES } from "./data";
 import Modal from "./components/Modal";
@@ -34,7 +33,8 @@ function App() {
     setOpenModal(false);
   }
 
-  function handleSelectPlace(id) {
+
+  const handleSelectPlace = useCallback(function handleSelectPlace(id) {
     setPickedPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((place) => place.id === id)) {
         return prevPickedPlaces;
@@ -46,7 +46,7 @@ function App() {
         ...prevPickedPlaces
       ];
     });
-  }
+  }, []);
 
   function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
