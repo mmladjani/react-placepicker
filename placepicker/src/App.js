@@ -23,7 +23,7 @@ function App() {
   
         setAvailablePlaces(sortedPlaces);
     })
-  })
+  }, [])
 
   function handleStartRemovePlace(id) {
     selectedPlace.current = id;
@@ -37,20 +37,15 @@ function App() {
   function handleSelectPlace(id) {
     setPickedPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((place) => place.id === id)) {
-        console.log(prevPickedPlaces, 'prevPickedPlaces')
         return prevPickedPlaces;
       }
+      
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
-      return [place, ...prevPickedPlaces];
+      return [
+        place,
+        ...prevPickedPlaces
+      ];
     });
-
-    const storedIds = JSON.parse(sessionStorage.getItem('selectedPlaces')) || [];
-    if(storedIds.indexOf(id) === -1){
-      (sessionStorage.setItem(
-        'selectedPlaces',
-        JSON.stringify([...storedIds, id])
-      ))
-    }
   }
 
   function handleRemovePlace() {
@@ -66,6 +61,7 @@ function App() {
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
+          open={openModal}
         />
       </Modal>
 

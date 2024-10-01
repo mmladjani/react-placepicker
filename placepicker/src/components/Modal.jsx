@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 const Modal = ({ open, onClose, children }) => {
   
   const dialog = useRef();
-
+  
   useEffect(() => {
     if(open){
       dialog.current.showModal();
@@ -15,7 +15,7 @@ const Modal = ({ open, onClose, children }) => {
 
   return createPortal(
     <dialog className="modal" ref={dialog} onClose={onClose}>
-      {children}
+      {open ? children : null}
     </dialog>,
     document.getElementById('modal')
   );
