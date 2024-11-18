@@ -14,12 +14,12 @@ function App() {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-
       const sortedPlaces = sortPlacesByDistance(
         AVAILABLE_PLACES, 
         position.coords.latitude, 
-        position.coords.longitude);
-  
+        position.coords.longitude
+      );
+
         setAvailablePlaces(sortedPlaces);
     })
   }, [])
